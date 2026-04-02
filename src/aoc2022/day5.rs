@@ -2,19 +2,20 @@ use crate::Input;
 use std::str::FromStr;
 
 pub fn run(input: Input) {
-    let data = input.as_lines();
+    let data = input.blocks();
+    let (stack, moves) = (&data[0], &data[1]);
 
     // part one.
-    let stack_line = data.iter().position(|&s| s.starts_with(" 1")).unwrap();
-    let stack_num = data[stack_line].split_ascii_whitespace().last().unwrap();
+    let stack_num = stack.lines().next_back().unwrap();
+    let stack_num = stack_num.split_ascii_whitespace().next_back().unwrap();
     let stack_num = stack_num.parse::<usize>().unwrap();
 
     let mut stacks = (0..stack_num)
         .map(|n| {
-            data[..stack_line]
-                .iter()
+            stack
+                .lines()
                 .rev()
-                .map(|&s| s.chars().nth(1 + 4 * n).unwrap())
+                .map(|s| s.chars().nth(1 + 4 * n).unwrap())
                 .filter(|&b| b != ' ')
                 .collect::<Vec<_>>()
         })
@@ -22,9 +23,9 @@ pub fn run(input: Input) {
 
     {
         let mut stacks = stacks.clone();
-        data[stack_line + 2..]
-            .iter()
-            .map(|&s| s.parse::<Move>().unwrap())
+        moves
+            .lines()
+            .map(|s| s.parse::<Move>().unwrap())
             .for_each(|m| m.apply_single(&mut stacks));
         let top = stacks
             .iter()
@@ -34,9 +35,9 @@ pub fn run(input: Input) {
     }
 
     // part two.
-    data[stack_line + 2..]
-        .iter()
-        .map(|&s| s.parse::<Move>().unwrap())
+    moves
+        .lines()
+        .map(|s| s.parse::<Move>().unwrap())
         .for_each(|m| m.apply_multi(&mut stacks));
     let top = stacks
         .iter()

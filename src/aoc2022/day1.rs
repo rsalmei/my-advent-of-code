@@ -1,12 +1,17 @@
 use crate::Input;
 
 pub fn run(input: Input) {
-    let data = input.as_optional::<u32>();
+    let data = input.map_blocks(|block| {
+        block
+            .lines()
+            .map(|line| line.parse::<u32>().unwrap())
+            .collect::<Vec<_>>()
+    });
 
     // part one.
     let mut elf_cal = data
-        .split(|line| line.is_none())
-        .map(|group| group.iter().map(|x| x.unwrap()).sum())
+        .iter()
+        .map(|group| group.iter().sum())
         .collect::<Vec<_>>();
     println!("{}", elf_cal.iter().max().unwrap());
 

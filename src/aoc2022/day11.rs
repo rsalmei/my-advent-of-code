@@ -3,21 +3,18 @@ use std::collections::{BinaryHeap, VecDeque};
 use std::str::FromStr;
 
 pub fn run(input: Input) {
-    let data = input.lines().collect::<Monkeys>();
+    let data = input.parse_blocks::<Monkey>();
 
     // part one.
-    let mut monkeys = data.clone();
-    let monkey_business = monkeys.sim(20, 3);
+    let mut monkeys = data.clone().into_vec();
+    let monkey_business = sim(&mut monkeys, 20, 3);
     println!("{monkey_business}");
 
     // part one.
-    let mut monkeys = data;
-    let monkey_business = monkeys.sim(10000, 1);
+    let mut monkeys = data.into_vec();
+    let monkey_business = sim(&mut monkeys, 10000, 1);
     println!("{monkey_business}");
 }
-
-#[derive(Debug, Clone)]
-struct Monkeys(Vec<Monkey>);
 
 #[derive(Debug, Clone)]
 struct Monkey {
@@ -41,28 +38,25 @@ struct Test {
     not: usize,
 }
 
-impl Monkeys {
-    fn sim(&mut self, rounds: usize, relief: u64) -> u64 {
-        let gcd = self.0.iter().fold(1, |acc, m| acc * m.test.div);
-        (0..rounds).for_each(|_| {
-            for mi in 0..self.0.len() {
-                while let Some((item, to)) = self.0[mi].round(relief) {
-                    self.0[to].items.push_back(item % gcd);
-                }
+fn sim(monkeys: &mut Vec<Monkey>, rounds: usize, relief: u64) -> u64 {
+    let gcd = monkeys.iter().fold(1, |acc, m| acc * m.test.div);
+    (0..rounds).for_each(|_| {
+        for mi in 0..monkeys.len() {
+            while let Some((item, to)) = monkeys[mi].round(relief) {
+                monkeys[to].items.push_back(item % gcd);
             }
-            // println!("round {r}");
-            // monkeys
-            //     .iter()
-            //     .enumerate()
-            //     .for_each(|(i, m)| println!("  monkey {i}: {:?} -> {}", m.items, m.inspected))
-        });
-        let mut inspected = self
-            .0
-            .iter()
-            .map(|m| m.inspected)
-            .collect::<BinaryHeap<_>>();
-        inspected.pop().unwrap() as u64 * inspected.pop().unwrap() as u64
-    }
+        }
+        // println!("round {r}");
+        // monkeys
+        //     .iter()
+        //     .enumerate()
+        //     .for_each(|(i, m)| println!("  monkey {i}: {:?} -> {}", m.items, m.inspected))
+    });
+    let mut inspected = monkeys
+        .iter()
+        .map(|m| m.inspected)
+        .collect::<BinaryHeap<_>>();
+    inspected.pop().unwrap() as u64 * inspected.pop().unwrap() as u64
 }
 
 impl Monkey {
@@ -87,42 +81,42 @@ impl Operation {
     }
 }
 
-impl<'a> FromIterator<&'a str> for Monkeys {
-    fn from_iter<T: IntoIterator<Item = &'a str>>(iter: T) -> Self {
-        let mut m = Vec::new();
-        let mut it = iter.into_iter();
-        while let Some(_monkey) = it.next() {
-            let items = it.next().unwrap().trim_start_matches("  Starting items: ");
-            let items = items.split(", ").map(|x| x.parse().unwrap()).collect();
-            let op = it.next().unwrap().trim_start_matches("  Operation: new = ");
-            let op = op.parse().unwrap();
-            let div = it
-                .next()
-                .unwrap()
-                .trim_start_matches("  Test: divisible by ");
-            let div = div.parse().unwrap();
-            let is = it
-                .next()
-                .unwrap()
-                .trim_start_matches("    If true: throw to monkey ");
-            let is = is.parse().unwrap();
-            let not = it
-                .next()
-                .unwrap()
-                .trim_start_matches("    If false: throw to monkey ");
-            let not = not.parse().unwrap();
-            it.next(); // skip line.
+impl FromStr for Monkey {
+    type Err = ();
 
-            m.push(Monkey {
-                items,
-                op,
-                test: Test { div, is, not },
-                inspected: 0,
-            });
-        }
-        Self(m)
+    fn from_str(s: &str) -> Result<Self, ()> {
+        let mut it = s.lines();
+        let _monkey = it.next();
+        let items = it.next().unwrap().trim_start_matches("  Starting items: ");
+        let items = items.split(", ").map(|x| x.parse().unwrap()).collect();
+        let op = it.next().unwrap().trim_start_matches("  Operation: new = ");
+        let op = op.parse()?;
+        let div = it
+            .next()
+            .unwrap()
+            .trim_start_matches("  Test: divisible by ");
+        let div = div.parse().unwrap();
+        let is = it
+            .next()
+            .unwrap()
+            .trim_start_matches("    If true: throw to monkey ");
+        let is = is.parse().unwrap();
+        let not = it
+            .next()
+            .unwrap()
+            .trim_start_matches("    If false: throw to monkey ");
+        let not = not.parse().unwrap();
+        it.next(); // skip line.
+
+        Ok(Monkey {
+            items,
+            op,
+            test: Test { div, is, not },
+            inspected: 0,
+        })
     }
 }
+
 impl FromStr for Operation {
     type Err = ();
 
