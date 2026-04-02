@@ -3,7 +3,7 @@ use std::collections::BTreeMap;
 use std::str::FromStr;
 
 pub fn run(input: Input) {
-    let mut data = input.as_lines();
+    let mut data = input.lines();
 
     // part one.
     data.sort_unstable();

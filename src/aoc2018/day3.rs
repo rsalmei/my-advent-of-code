@@ -2,7 +2,7 @@ use crate::Input;
 use std::str::FromStr;
 
 pub fn run(input: Input) {
-    let data = input.as_type::<Claim>();
+    let data = input.parse_lines::<Claim>();
 
     // part one.
     let mut grid = vec![0u16; 1000 * 1000];

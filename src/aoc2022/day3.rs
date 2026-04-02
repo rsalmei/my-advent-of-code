@@ -2,7 +2,7 @@ use crate::Input;
 use std::collections::HashSet;
 
 pub fn run(input: Input) {
-    let data = input.as_lines();
+    let data = input.lines();
 
     // part one.
     let mut priority = Vec::with_capacity(53);
@@ -12,7 +12,7 @@ pub fn run(input: Input) {
 
     let items = data
         .iter()
-        .map(|&ks| {
+        .map(|ks| {
             let (a, b) = ks.split_at(ks.len() / 2);
             let a = a.as_bytes().iter().copied().collect::<HashSet<_>>();
             let b = b.as_bytes().iter().copied().collect();

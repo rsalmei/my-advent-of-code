@@ -2,7 +2,7 @@ use crate::Input;
 use std::str::FromStr;
 
 pub fn run(input: Input) {
-    let data = input.as_type();
+    let data = input.parse_lines();
 
     // part one.
     let (mut cpu, mut mem) = (Cpu::new(), data.iter());

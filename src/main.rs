@@ -36,14 +36,14 @@ fn main() {
         Some(runs) => match runs.get(&day) {
             Some(run) => {
                 println!("year: {year}  day: {day}\n");
-                runner(&|| run(Input::new(year, day).unwrap()), clean);
+                runner(|| run(Input::read(year, day).unwrap()), clean);
             }
             None => {
                 println!("year: {year}");
                 let mut total = Duration::from_secs(0);
                 for (&day, run) in runs {
                     println!("\nday: {day}");
-                    total += runner(&|| run(Input::new(year, day).unwrap()), clean);
+                    total += runner(|| run(Input::read(year, day).unwrap()), clean);
                 }
                 println!("\ntotal -- {total:?}");
             }

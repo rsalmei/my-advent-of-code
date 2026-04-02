@@ -2,12 +2,10 @@ use crate::Input;
 use std::str::FromStr;
 
 pub fn run(input: Input) {
-    let data = input
-        .as_lines()
-        .iter()
-        .map(|&s| s.split_once(',').unwrap())
-        .map(|(s, t)| (s.parse::<Pair>().unwrap(), t.parse().unwrap()))
-        .collect::<Vec<_>>();
+    let data = input.map_lines(|s| {
+        let (s, t) = s.split_once(',').unwrap();
+        (s.parse::<Pair>().unwrap(), t.parse().unwrap())
+    });
 
     // part one.
     let redundant = data.iter().filter(|(p, q)| p.fully_contains(q));

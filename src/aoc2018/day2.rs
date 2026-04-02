@@ -2,7 +2,7 @@ use crate::Input;
 use std::collections::HashMap;
 
 pub fn run(input: Input) {
-    let data = input.as_lines();
+    let data = input.lines();
 
     // part one.
     let mut tmp = HashMap::new();

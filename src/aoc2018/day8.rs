@@ -1,7 +1,7 @@
 use crate::Input;
 
 pub fn run(input: Input) {
-    let data = input.lines().next().unwrap();
+    let data = input.text();
 
     // part one.
     let tree = data

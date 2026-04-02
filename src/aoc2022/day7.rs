@@ -3,11 +3,7 @@ use std::collections::HashMap;
 use std::str::FromStr;
 
 pub fn run(input: Input) {
-    let data = input
-        .as_lines()
-        .iter()
-        .map(|&r| r.parse::<Row>().unwrap())
-        .collect::<Vec<_>>();
+    let data = input.parse_lines();
 
     // part one.
     let sh = data.iter().fold(Sh::default(), |sh, row| sh.apply(row));

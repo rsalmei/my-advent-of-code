@@ -2,7 +2,7 @@ use crate::Input;
 use std::str::FromStr;
 
 pub fn run(input: Input) {
-    let data = input.as_type::<Point>();
+    let data = input.parse_lines::<Point>();
 
     // part one.
     let mut sky = Sky {

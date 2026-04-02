@@ -2,7 +2,7 @@ use crate::Input;
 use std::collections::VecDeque;
 
 pub fn run(input: Input) {
-    let data = input.lines().next().unwrap();
+    let data = input.text();
 
     // part one.
     let mut it = data.split_ascii_whitespace();

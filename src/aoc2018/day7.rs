@@ -4,7 +4,7 @@ use std::collections::{BinaryHeap, HashSet};
 use std::str::FromStr;
 
 pub fn run(input: Input) {
-    let data = input.as_type::<Step>();
+    let data = input.parse_lines::<Step>();
 
     // part one.
     let mut todo = data

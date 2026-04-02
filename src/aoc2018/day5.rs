@@ -2,7 +2,7 @@ use crate::Input;
 use std::iter;
 
 pub fn run(input: Input) {
-    let data = Vec::from(input.lines().next().unwrap());
+    let data = input.bytes();
 
     // part one.
     fn react_fully<'a>(w: impl Iterator<Item = &'a u8>, out: &mut Vec<u8>) -> usize {
