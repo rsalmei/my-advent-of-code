@@ -10,7 +10,7 @@ pub struct Input(String);
 
 impl Input {
     pub fn read(year: u16, day: u8) -> io::Result<Self> {
-        let path = format!("src/aoc{year}/inputs/{day}");
+        let path = format!("inputs/{year}/{day}");
         Ok(Self(fs::read_to_string(path)?))
     }
 
