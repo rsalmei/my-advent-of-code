@@ -3,7 +3,6 @@ mod input;
 
 use clap::Parser;
 use input::Input;
-use std::collections::BTreeMap;
 use std::time::{Duration, Instant};
 
 #[derive(Debug, Parser)]
@@ -17,12 +16,6 @@ struct Args {
     clean: bool,
 }
 
-aoc! {
-    2018: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-    2022: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-    2025: [1, 2, 3],
-}
-
 fn main() {
     println!("My Advent of Code");
     println!("-----------------");
@@ -30,7 +23,7 @@ fn main() {
     let Args { year, day, clean } = Args::parse();
     let year = year.unwrap_or_default();
 
-    let aoc = collect_aoc(); // collect the implemented puzzles.
+    let aoc = aoc::collect_years(); // collect the implemented puzzles.
     match (aoc.get(&year), day) {
         (Some(runs), Some(d)) if runs.contains_key(&d) => {
             println!("year: {year}  day: {d}\n");
