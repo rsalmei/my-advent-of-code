@@ -16,7 +16,7 @@ impl Input {
 
     /// Get the raw text of the input, without the trailing newline.
     pub fn text(mut self) -> Box<str> {
-        let s = self.0.trim_end_matches('\n');
+        let s = self.0.trim_end_matches('\n').trim_end_matches('\r');
         self.0.truncate(s.len());
         self.0.into_boxed_str()
     }
